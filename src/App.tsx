@@ -20,7 +20,7 @@ const App: React.FC = () => {
   return (
     <div className={`App ${theme === 'dark' && 'bp3-dark'}`}>
       {!session.loggedIn
-        ? <Login />
+        ? <Login /> 
         : <MainGrid>
             <NavBar name='navBar'/>
             <SideBar name="sideBar"/>
