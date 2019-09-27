@@ -5,8 +5,21 @@ import * as THREE from 'three';
 export default (function($t) {
     var random_storage = [];
     this.use_true_random = false;
-    this.use_adapvite_timestep = true;
+    this.use_adapvite_timestep = false;
     this.frame_rate = 1 / 60;
+    this.socket = null;
+    this.diceBoxObj = null;
+
+    this.setSocket = (socket) => {
+      this.socket = socket;
+      this.socket.on('getVectors', ({ vectors, notation }) => {
+        throw_dices_from_others(this.diceBoxObj, vectors, notation);
+      });
+    }
+
+    this.setDiceBoxObj = (box) => {
+      this.diceBoxObj = box;
+    }
 
     function prepare_rnd(callback) {
         if (!random_storage.length && $t.dice.use_true_random) {
@@ -434,7 +447,7 @@ export default (function($t) {
     var that = this;
 
     this.dice_box = function(container, dimentions) {
-        this.use_adapvite_timestep = true;
+        this.use_adapvite_timestep = false;
         // this.animate_selector = false;
 
         this.dices = [];
@@ -745,7 +758,6 @@ export default (function($t) {
     }
 
     this.dice_box.prototype.roll = function(vectors, values, callback) {
-        console.log(vectors);
         this.prepare_dices_for_roll(vectors);
         if (values != undefined && values.length) {
             this.use_adapvite_timestep = false;
@@ -785,9 +797,19 @@ export default (function($t) {
         var notation = notation_getter.call(box);
         if (notation.set.length == 0) return;
         var vectors = box.generate_vectors(notation, vector, boost);
+        box.socket.emit('diceVectors', { vectors: vectors, notation: notation, after_roll: after_roll });
         box.rolling = true;
         if (before_roll) before_roll.call(box, vectors, notation, roll);
         else roll();
+    }
+
+    function throw_dices_from_others(box, vectors, notation) {
+      box.clear();
+      box.rolling = true;
+      box.roll(vectors, notation.result, function(result) {
+          box.rolling = false;
+          console.log(result);
+      });
     }
 
     this.dice_box.prototype.shake_dices = function(linear_speed, angular_speed, after_shake) {
@@ -848,13 +870,14 @@ export default (function($t) {
     this.dice_box.prototype.start_throw = function(notation_getter, before_roll, after_roll, vector) {
         var box = this;
         if (box.rolling) return;
-        prepare_rnd(function() {
+        prepare_rnd(() => {
             if (!vector) vector = { x: (rnd() * 2 - 1) * box.w, y: -(rnd() * 2 - 1) * box.h };
             var dist = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
             var boost = (rnd() + 6) * dist;
             throw_dices(box, vector, boost, dist, notation_getter, before_roll, after_roll);
         });
     }
+    
     return this;
 })
 

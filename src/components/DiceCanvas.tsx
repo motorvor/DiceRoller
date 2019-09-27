@@ -30,12 +30,20 @@ export default function DiceCanvas() {
     box.animate_selector = false;
     $t.dice.label_color = '#202020'; // while dice with black labels
     $t.dice.dice_color = '#8a8a8a';
+    $t.dice.diceBoxObj = box;
+    console.log($t.dice.diceBoxObj)
     return box;
   }
 
   useEffect(() => {
+    if (!$t.dice.socket && socket) {
+      $t.dice.setSocket(socket);
+    }
     if (box === null) {
       setBox(setCanvas());
+    }
+    if (box) {
+      $t.dice.setDiceBoxObj(box);
     }
   })
 
@@ -54,6 +62,7 @@ export default function DiceCanvas() {
 
   let throwDice = function(box: any) {
       if (box.rolling) return;
+      box.socket = socket;
       socket.emit('sendStatus', { name: session.me.name, status: 'Throwing ' + [...dice].toString() })
       // bind on-click event to your button. Start roll on button click.
       box.clear();

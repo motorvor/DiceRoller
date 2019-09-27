@@ -36,6 +36,10 @@ io.on('connection', function(socket) {
     io.in(socket.room).emit('receiveStatus', { from: socket.nickname, msg: { status: data.status, dice: data.dice } })
   });
 
+  socket.on('diceVectors', (data) => {
+    socket.to(socket.room).emit('getVectors', data);
+  });
+
   socket.on('disconnect', () => {
     if (rooms[socket.room]) {
       let index = rooms[socket.room].indexOf(rooms[socket.room].find((player) => player.name === socket.nickname));
