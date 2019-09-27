@@ -7,10 +7,9 @@ let socket: any = null;
 export default function MainGrid(props: any) {
   const { session, setSocket, onConnect, removeConnect, onGetPlayers, removeGetPlayers } = useSessionContext();
   if (!socket) {
-    socket = io.connect('http://localhost:5000');
+    socket = io.connect('https://dice-roller-api.herokuapp.com');
     setSocket(socket);
   }
-  // setSocket(io.connect('https://dice-roller-api.herokuapp.com'));
 
   useEffect(() => {
     // if (session.socket) {
