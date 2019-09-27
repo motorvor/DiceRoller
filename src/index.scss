@@ -1,0 +1,133 @@
+@import "../node_modules/normalize.css";
+@import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+@import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.App {
+  background-color: #CED9E0;
+  height: 100vh;
+  &.bp3-dark {
+    background-color: #293742;
+  }
+}
+
+// $a-tags: 'a, a:active, a:hover, a:visited, a:active, a:hover';
+// #{$a-tags} .navButton {
+//   text-decoration: none;
+//   color: #182026 !important;
+
+//   .bp3-dark & {
+//     color: #f5f8fa !important;
+//   }
+// }
+
+.logoFont {
+  font-family: 'Raleway', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 100;
+  font-size: 120px;
+  color: #293742;
+}
+
+.triangleInfoBtn {
+  cursor: pointer;
+  border: 2px solid rgb(148, 148, 148);
+  background-color: rgba(148, 148, 148, 0.473);
+  border-radius: 20px;
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  line-height: 0.28;
+  color: #293742;
+}
+
+.mainElement {
+  background-color: #F5F8FA;
+  border: 1px solid #A7B6C2;
+  box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 0 0 rgba(16,22,26,0), 0 1px 1px rgba(16,22,26,.2);
+  .bp3-dark & {
+    background-color: #30404D;
+    border: 1px solid #202B33;
+    box-shadow: 0 0 0 1px rgba(16,22,26,.2), 0 0 0 rgba(16,22,26,0), 0 1px 1px rgba(16,22,26,.4)
+  }
+}
+
+.mainWrap {
+  overflow: hidden;
+}
+
+.bp3-form-group {
+  align-items: start;
+}
+
+.loginBackground {
+  padding: 40px !important;
+  border-radius: 4px;
+  background-color: rgba(245, 248, 250, .6);
+  .bp3-dark & {
+    background-color: rgba(48, 64, 77, .6);
+  }
+}
+
+.loginButton {
+  width: 181.6px;
+}
+
+.playersList {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.playerCard {
+  min-height: 100px !important;
+  box-shadow: 0 0 0 1px rgba(16,22,26,.15), 0 0 0 rgba(16,22,26,0), 0 0 0 rgba(16,22,26,0);
+  background-color: #EBF1F5;
+  .bp3-dark & {
+    background-color: #394B59;
+    box-shadow: 0 0 0 1px rgba(16,22,26,.4), 0 0 0 rgba(16,22,26,0), 0 0 0 rgba(16,22,26,0)
+  }
+}
+
+// Font Size
+$fontsizes: (12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 80);
+@each $size in $fontsizes {
+  .fs-#{$size} {
+    font-size: #{$size}px;
+  }
+}
+
+// Generators
+$spaceamounts: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (
+  "": "all",
+  "t": "top",
+  "b": "bottom",
+  "l": "left",
+  "r": "right",
+);
+
+@each $space in $spaceamounts {
+  @each $prefix, $value in $sides {
+    $property: if($prefix == '', '', -#{$value});
+    .m#{$prefix}#{$space} {
+      margin#{$property}: #{$space}px !important;
+    }
+    .p#{$prefix}#{$space} {
+      padding#{$property}: #{$space}px !important;
+    }
+  }
+}
