@@ -1,24 +1,28 @@
 import { useReducer } from 'react';
 import createUseContext from 'constate';
-import { User } from '../interfaces/User';
+import { User } from '../classes/User';
 
 interface Session {
   me: User,
   loggedIn: boolean,
   players: User[],
   socket: any
-  room: string
+  room: string,
+  currentUserView: User
 }
 
+let me = new User({
+  name: 'Guest',
+  status: 'Rolling a d20'
+})
+
 const initSession: Session = {
-  me: {
-    name: '',
-    status: ''
-  },
+  me: me,
   loggedIn: false,
   players: [],
   socket: null,
-  room: ''
+  room: '',
+  currentUserView: me
 }
 
 const reducerFn = (state: any, action: any) => {
@@ -46,6 +50,10 @@ const reducers: any = {
     ...state,
     room: action.payload
   }),
+  'SET_CURRENTUSERVIEW': (state: any, action: any) => ({
+    ...state,
+    currentUserView: action.payload
+  }),
   'LOGIN': (state: any, action: any) => ({
     ...state,
     loggedIn: true
@@ -61,7 +69,8 @@ function useSession() {
   const setStatus = (value: any) => { dispatch({ type: 'SET_STATUS', payload: value }) }
   const setPlayers = (value: any) => {dispatch({ type: 'SET_PLAYERS', payload: value })}
   const setRoom = (value: any) => { dispatch({ type: 'SET_ROOM', payload: value }) }
-  const setSocket = (value: any) => { dispatch({ type: 'SET_SOCKET', payload: value }) }
+  const setSocket = (value: any) => { value.userId = session.me.id; dispatch({ type: 'SET_SOCKET', payload: value }); }
+  const setCurrentUserView = (value: any) => { dispatch({ type: 'SET_CURRENTUSERVIEW', payload: value })}
   const login = () => { dispatch({ type: 'LOGIN' })}
   const logout = () => { dispatch({ type: 'LOGOUT' })}
 
@@ -83,18 +92,24 @@ function useSession() {
   const removeGetPlayers = (socket: any) => {
     socket.removeListener('getPlayers');
   }
+
+  const checkIfMe = () => {
+    return session.me.id === session.currentUserView.id;
+  }
   return { 
     session,
     setName,
     setStatus,
     setRoom,
     setSocket,
+    setCurrentUserView,
     login,
     logout,
     onConnect,
     onGetPlayers,
     removeConnect,
-    removeGetPlayers
+    removeGetPlayers,
+    checkIfMe
   };
 }
 

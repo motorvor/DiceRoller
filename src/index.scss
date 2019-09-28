@@ -4,11 +4,12 @@
 
 body {
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   overflow: hidden;
+  font-weight: 300
 }
 
 code {
@@ -62,7 +63,7 @@ code {
   .bp3-dark & {
     background-color: #30404D;
     border: 1px solid #202B33;
-    box-shadow: 0 0 0 1px rgba(16,22,26,.2), 0 0 0 rgba(16,22,26,0), 0 1px 1px rgba(16,22,26,.4)
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.2), 0 1px 1px rgba(16, 22, 26, 0.4), 0 2px 6px rgba(16, 22, 26, 0.4)
   }
 }
 
@@ -94,12 +95,18 @@ code {
 
 .playerCard {
   min-height: 100px !important;
-  box-shadow: 0 0 0 1px rgba(16,22,26,.15), 0 0 0 rgba(16,22,26,0), 0 0 0 rgba(16,22,26,0);
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.2), 0 1px 1px rgba(16, 22, 26, 0.4), 0 2px 6px rgba(16, 22, 26, 0.4);
   background-color: #EBF1F5;
+  transition:box-shadow .1s linear;
   .bp3-dark & {
     background-color: #394B59;
-    box-shadow: 0 0 0 1px rgba(16,22,26,.4), 0 0 0 rgba(16,22,26,0), 0 0 0 rgba(16,22,26,0)
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.2), 0 1px 1px rgba(16, 22, 26, 0.4), 0 2px 6px rgba(16, 22, 26, 0.4)
   }
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(16,22,26,.2), 0 2px 4px rgba(16,22,26,.4), 0 8px 24px rgba(16,22,26,.4)
+  }
+  
 }
 
 // Font Size

@@ -18,9 +18,14 @@ context!.drawImage(canvas, 0, 0);
 context!.restore();
 let url = canvas.toDataURL();
 
+
+
 export default function Login() {
-  const { setName, setRoom, login } = useSessionContext();
-  
+  const { session, setName, setRoom, login, setCurrentUserView } = useSessionContext();
+  const loginWrapper = () => {
+    setCurrentUserView(session.me);
+    login();
+  }
   return (
     <Box style={{ backgroundSize: 'cover', backgroundImage: 'url(' + url + ')'}}
       fill 
@@ -41,7 +46,7 @@ export default function Login() {
           <InputGroup autoComplete="off" id="text-input" placeholder="Enter the room name..." onChange={(e: any) => setRoom(e.target.value)}/>
         </FormGroup>
         <Box className="loginButton mt10">
-          <Button intent="success" rightIcon="arrow-right" text="Join" onClick={login}/>
+          <Button intent="success" rightIcon="arrow-right" text="Join" onClick={() => loginWrapper()}/>
         </Box>
       </Box>
       <Popover className="triangleInfoBtn" popoverClassName="bp3-dark" interactionKind={PopoverInteractionKind.HOVER} position="left">

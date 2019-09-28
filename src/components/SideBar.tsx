@@ -3,7 +3,7 @@ import { Box } from 'grommet';
 
 import { useSessionContext } from '../contexts/SessionContext';
 import PlayerCard from './PlayerCard';
-import { User } from '../interfaces/User';
+import { User } from '../classes/User';
 // import PlayerCard from './PlayerCard';
 // import { Scrollbars } from 'react-custom-scrollbars';
 

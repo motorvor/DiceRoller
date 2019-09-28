@@ -10,12 +10,12 @@ export default (function($t) {
     this.socket = null;
     this.diceBoxObj = null;
 
-    this.setSocket = (socket) => {
-      this.socket = socket;
-      this.socket.on('getVectors', ({ vectors, notation }) => {
-        throw_dices_from_others(this.diceBoxObj, vectors, notation);
-      });
-    }
+    // this.setSocket = (socket) => {
+    //   this.socket = socket;
+    //   this.socket.on('getVectors', ({ vectors, notation }) => {
+    //     throw_dices_from_others(this.diceBoxObj, vectors, notation);
+    //   });
+    // }
 
     this.setDiceBoxObj = (box) => {
       this.diceBoxObj = box;
@@ -797,13 +797,13 @@ export default (function($t) {
         var notation = notation_getter.call(box);
         if (notation.set.length == 0) return;
         var vectors = box.generate_vectors(notation, vector, boost);
-        box.socket.emit('diceVectors', { vectors: vectors, notation: notation, after_roll: after_roll });
+        box.socket.emit('diceVectors', { id: box.socket.userId, vectors: vectors, notation: notation, after_roll: after_roll });
         box.rolling = true;
         if (before_roll) before_roll.call(box, vectors, notation, roll);
         else roll();
     }
 
-    function throw_dices_from_others(box, vectors, notation) {
+    this.throw_dices_from_others = (box, vectors, notation) => {
       box.clear();
       box.rolling = true;
       box.roll(vectors, notation.result, function(result) {

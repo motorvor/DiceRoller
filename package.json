@@ -23,7 +23,8 @@
     "styled-components": "^4.4.0",
     "three": "^0.108.0",
     "trianglify": "^2.0.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.3",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

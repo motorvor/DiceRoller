@@ -9,8 +9,9 @@ const $t = teal.default;
 export default function DiceCanvas() {
   const [dice, setDice]: any = useState([]);
   const [box, setBox]: any = useState(null);
-  const { session, session: { socket } } = useSessionContext();
+  const { session, session: { socket }, checkIfMe } = useSessionContext();
   $t.dice = Dice.apply($t.dice = $t.dice || {}, [$t]);
+  
 
   function addDie(dieType: string) {
     setDice([...dice, dieType]);
@@ -35,15 +36,30 @@ export default function DiceCanvas() {
     return box;
   }
 
+  function setSocketListeners() {
+    $t.dice.socket = socket;
+    socket.on('getVectors', ({ id, vectors, notation }: any) => {
+      if (session.currentUserView.id === id) {
+        $t.dice.throw_dices_from_others(box, vectors, notation);
+      }
+    });
+  }
+
   useEffect(() => {
     if (!$t.dice.socket && socket) {
-      $t.dice.setSocket(socket);
+      // $t.dice.setSocket(socket);
+      setSocketListeners();
     }
     if (box === null) {
       setBox(setCanvas());
     }
     if (box) {
       $t.dice.setDiceBoxObj(box);
+    }
+    return () => {
+      if (socket) {
+        socket.removeListener('getVectors');
+      }
     }
   })
 
@@ -74,19 +90,25 @@ export default function DiceCanvas() {
 
   return (
     <Box fill>
-      <Box direction="row">
-        <ButtonGroup large >
-          <Button minimal onClick={() => addDie('d4')}>D4</Button>
-          <Button minimal onClick={() => addDie('d6')}>D6</Button>
-          <Button minimal onClick={() => addDie('d8')}>D8</Button>
-          <Button minimal onClick={() => addDie('d10')}>D10</Button>
-          <Button minimal onClick={() => addDie('d12')}>D12</Button>
-          <Button minimal onClick={() => addDie('d20')}>D20</Button>
-          <Button minimal onClick={() => addDie('d100')}>D100</Button>
-          <Button minimal intent="danger" rightIcon="cross" onClick={() => clearDice()}>Clear</Button>
-          <Switch className="m5 mt10" label="Private" />
-          <Button minimal intent="success" rightIcon="arrow-right" onClick={() => throwDice(box)}>Roll!</Button>
-        </ButtonGroup>
+      <Box direction="row"
+        justify="between">
+        { session.me.id == session.currentUserView.id &&
+          <ButtonGroup large >
+            <Button minimal onClick={() => addDie('d4')}>D4</Button>
+            <Button minimal onClick={() => addDie('d6')}>D6</Button>
+            <Button minimal onClick={() => addDie('d8')}>D8</Button>
+            <Button minimal onClick={() => addDie('d10')}>D10</Button>
+            <Button minimal onClick={() => addDie('d12')}>D12</Button>
+            <Button minimal onClick={() => addDie('d20')}>D20</Button>
+            <Button minimal onClick={() => addDie('d100')}>D100</Button>
+            <Button minimal intent="danger" rightIcon="cross" onClick={() => clearDice()}>Clear</Button>
+            <Switch className="m5 mt10" label="Private" />
+            <Button minimal intent="success" rightIcon="arrow-right" onClick={() => throwDice(box)}>Roll!</Button>
+          </ButtonGroup>
+        }
+        { session.me.id !== session.currentUserView.id &&
+          session.currentUserView.name + ` 's dice board`
+        }
       </Box>
       <Box id="canvas"
         fill="vertical">

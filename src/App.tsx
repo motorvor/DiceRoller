@@ -12,6 +12,10 @@ import DiceCanvas from './components/DiceCanvas';
 import { Box } from 'grommet';
 import SideBar from './components/SideBar';
 
+import { FocusStyleManager } from "@blueprintjs/core";
+ 
+FocusStyleManager.onlyShowFocusOnTabs();
+
 
 const App: React.FC = () => {
   const { theme } = useThemeContext();
