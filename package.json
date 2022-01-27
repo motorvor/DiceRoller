@@ -21,7 +21,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "styled-components": "^4.4.0",
-    "three": "^0.108.0",
+    "three": "^0.137.0",
     "trianglify": "^2.0.0",
     "typescript": "3.6.3",
     "uuid": "^3.3.3"
